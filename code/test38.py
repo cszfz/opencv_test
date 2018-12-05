@@ -6,7 +6,7 @@ import json
 
 #图像地址
 dirTrain='C:\\Users\\Raytine\\project\\image_train\\'
-dirTest='C:\\Users\\Raytine\\project\\image_test_s\\'
+dirTest='C:\\Users\\Raytine\\project\\image_test_0.22\\'
 
 #角度范围
 angle=5

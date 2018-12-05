@@ -13,3 +13,4 @@ cv.imwrite("thresh.jpg",thresh)
 cv.waitKey(0)
 #释放窗口
 cv2.destroyAllWindows() 
+ftype py_auto_file="D:\Program Files\Sublime Text 3\sublime_text.exe" "%1"

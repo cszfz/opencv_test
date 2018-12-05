@@ -6,7 +6,7 @@ import json
 
 #图像地址
 dirTrain='C:\\Users\\Raytine\\project\\image_train\\'
-dirTest='C:\\Users\\Raytine\\project\\image_test\\'
+dirTest='C:\\Users\\Raytine\\project\\image_test_0.22\\'
 
 #角度范围
 angle=5
@@ -66,7 +66,7 @@ while img_name_test:
 	for i in range(step_number*step_number*step_number):
 		F[i,:]=f[i,:]-feature
 
-	F=np.power(F,2)
+	F=np.abs(F)
 	s=np.sum(F,axis=1)
 	index=np.argmin(s)
 	m=np.min(s)
