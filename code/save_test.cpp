@@ -29,7 +29,7 @@ float yRotate = range_min*1.0;
 float zRotate = range_min*1.0;
 float ty = 0.0f;
 //float scale = 0.0145;
-float scale=0.02;
+float scale=0.018;
 
 
 //文件读取有关的
@@ -44,7 +44,7 @@ bool showFace = true;
 bool showWire = false;
 bool showFlatlines = false;
 
-int WIDTH=800,HEIGHT=800;
+int WIDTH=1000,HEIGHT=1000;
 FIBITMAP* bitmap = FreeImage_Allocate(WIDTH, HEIGHT, 24, 8, 8, 8);
 unsigned char *mpixels = new unsigned char[WIDTH * HEIGHT * 3];
 
@@ -141,7 +141,7 @@ void grab(char *pName)
 {
     
     glReadBuffer(GL_FRONT);
-    glReadPixels(160, 200, WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, mpixels);
+    glReadPixels(24, 24, WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, mpixels);
     glReadBuffer(GL_BACK);
     for(int i = 0; i < (int)WIDTH*HEIGHT*3; i += 3)
     {   
@@ -213,18 +213,17 @@ void myReshape(GLint w, GLint h)
 }
 double randf() 
 { 
-    double r=(double)(rand()/(double)RAND_MAX);
-    int t=r*100;
-    r=t*1.0/10-5;
+    double r=(double)(rand()%101);
+    r=r*1.0/10-5;
     return r; 
 } 
 void myDisplay()
 {
-    
+    //srand((int)time(0));//使用系统时间作为随机种子
     if(flag){
         ofstream outfile;
         outfile.open("image_test.txt",ios::out);
-        for(int i=0;i<10;i++)
+        for(int i=0;i<1000;i++)
         {
         
             xRotate=randf();
@@ -261,6 +260,7 @@ void myDisplay()
 
 int main(int argc, char** argv)
 {
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH); // GLUT_Double 表示使用双缓存而非单缓存
     glutInitWindowPosition(100, 100);
@@ -274,4 +274,5 @@ int main(int argc, char** argv)
 
     glutMainLoop();
     return 0;
+    
 }
