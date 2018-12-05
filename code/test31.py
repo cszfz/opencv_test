@@ -34,5 +34,5 @@ cnt = contours[0]
 
 M = cv2.moments(cnt)
 f2[0,:]=[M['nu20'],M['nu11'],M['nu02'],M['nu30'],M['nu21'],M['nu12'],M['nu03']]
-
+print(f2)
 print(np.sum(np.abs(f1[0,:]-f2[0,:])))

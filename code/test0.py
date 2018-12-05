@@ -1,8 +1,10 @@
+#coding=utf-8
 import cv2
 import numpy as numpy
 
 dirPath="C:\\Users\\Raytine\\project\\image_thresh\\"
-dstPath="C:\\Users\\Raytine\\project\\image_bounding\\"
+dstPath="C:\\Users\\Raytine\\project\\image_bounding_b\\"
+hb=5
 for i in range(-5,6):
 	for j in range(-5,6):
 		for k in range(-5,6):
@@ -12,6 +14,7 @@ for i in range(-5,6):
 			_,contours,hierarchy = cv2.findContours(thresh, 1, 2)
 			cnt = contours[0]
 			x,y,w,h = cv2.boundingRect(cnt)
-			result=img[y:y+h,x:x+w]
+			wb=int(h*hb/w)
+			result=img[y-hb:y+h+hb,x-wb:x+w+wb]
 			cv2.imwrite(dstPath+imgPath,result)
 			
