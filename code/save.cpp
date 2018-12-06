@@ -18,11 +18,15 @@ typedef OpenMesh::TriMesh_ArrayKernelT<> MyMesh;
 
 
 //设置角度范围
-int range=10;
-//设置步长
-float step =0.2;
+int angle=5;
 
-int range_min=0;
+//设置步长
+float step =0.5;
+
+//迭代次数
+int range=angle*2/step;
+
+double range_min=angle*(-1);
 //与实现角度大小相关的参数，
 float xRotate = range_min*1.0;
 float yRotate = range_min*1.0;
@@ -34,7 +38,7 @@ float scale=0.02;
 
 //文件读取有关的
 MyMesh mesh;
-const string file_1 = "newtest.off";
+const string file_1 = "newtest1.off";
 
 int flag=1;
 
@@ -44,11 +48,39 @@ bool showFace = true;
 bool showWire = false;
 bool showFlatlines = false;
 
-int WIDTH=800,HEIGHT=800;
+int WIDTH=900,HEIGHT=900;
 FIBITMAP* bitmap = FreeImage_Allocate(WIDTH, HEIGHT, 24, 8, 8, 8);
 unsigned char *mpixels = new unsigned char[WIDTH * HEIGHT * 3];
 
 int first=0;
+
+void grab(char *pName)
+{
+    
+    glReadBuffer(GL_FRONT);
+    glReadPixels(0, 0, WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, mpixels);
+    glReadBuffer(GL_BACK);
+    for(int i = 0; i < (int)WIDTH*HEIGHT*3; i += 3)
+    {   
+        mpixels[i] ^= mpixels[i+2] ^= mpixels[i] ^= mpixels[i+2];
+    }
+ 
+    for(int y = 0 ; y < FreeImage_GetHeight(bitmap); y++)
+    {
+        BYTE *bits = FreeImage_GetScanLine(bitmap, y);
+        for(int x = 0 ; x < FreeImage_GetWidth(bitmap); x++)
+        {
+            bits[0] = mpixels[(y*WIDTH+x) * 3 + 0];
+            bits[1] = mpixels[(y*WIDTH+x) * 3 + 1];
+            bits[2] = mpixels[(y*WIDTH+x) * 3 + 2];
+            bits += 3;
+        }
+ 
+    }
+
+    FreeImage_Save(FIF_JPEG, bitmap, pName, JPEG_DEFAULT);
+
+}
 //初始化顶点和面   
 void initGL()
 {
@@ -137,33 +169,7 @@ void createName(float x, float y, float z,char* n)
 }
 
 
-void grab(char *pName)
-{
-    
-    glReadBuffer(GL_FRONT);
-    glReadPixels(160, 200, WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, mpixels);
-    glReadBuffer(GL_BACK);
-    for(int i = 0; i < (int)WIDTH*HEIGHT*3; i += 3)
-    {   
-        mpixels[i] ^= mpixels[i+2] ^= mpixels[i] ^= mpixels[i+2];
-    }
- 
-    for(int y = 0 ; y < FreeImage_GetHeight(bitmap); y++)
-    {
-        BYTE *bits = FreeImage_GetScanLine(bitmap, y);
-        for(int x = 0 ; x < FreeImage_GetWidth(bitmap); x++)
-        {
-            bits[0] = mpixels[(y*WIDTH+x) * 3 + 0];
-            bits[1] = mpixels[(y*WIDTH+x) * 3 + 1];
-            bits[2] = mpixels[(y*WIDTH+x) * 3 + 2];
-            bits += 3;
-        }
- 
-    }
 
-    FreeImage_Save(FIF_JPEG, bitmap, pName, JPEG_DEFAULT);
-
-}
 
 
 // 读取文件的函数
@@ -257,7 +263,7 @@ int main(int argc, char** argv)
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH); // GLUT_Double 表示使用双缓存而非单缓存
     glutInitWindowPosition(100, 100);
-    glutInitWindowSize(1024, 1024);
+    glutInitWindowSize(WIDTH, HEIGHT);
     glutCreateWindow("Mesh Viewer");
     readfile(file_1);
     initGL();
