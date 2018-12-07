@@ -1,0 +1,22 @@
+<!DOCTYPE MeshLabDocument>
+<MeshLabProject>
+ <MeshGroup>
+  <MLMesh label="3 RT.1.off" filename="3RT.off">
+   <MLMatrix44>
+0.14273 0.989014 -0.0384547 -9.83913 
+0.877358 -0.108442 0.467421 55.3122 
+0.458116 -0.100454 -0.883198 -198.549 
+0 0 0 1 
+</MLMatrix44>
+  </MLMesh>
+  <MLMesh label="3 RT.off" filename="3 RT.off">
+   <MLMatrix44>
+0.99973 -0.0159116 -0.0169531 -1.73425 
+0.0159559 0.99987 0.00248094 -0.121547 
+0.0169114 -0.00275077 0.999853 -0.333375 
+0 0 0 1 
+</MLMatrix44>
+  </MLMesh>
+ </MeshGroup>
+ <RasterGroup/>
+</MeshLabProject>
