@@ -6,11 +6,18 @@ import json
 
 #图像地址
 dirTrain='C:\\Users\\Raytine\\project\\image_train\\'
-dirTests=['C:\\Users\\Raytine\\project\\image_test_0.009\\',
-		  'C:\\Users\\Raytine\\project\\image_test_0.012\\',
-		  'C:\\Users\\Raytine\\project\\image_test_0.015\\',
-		  'C:\\Users\\Raytine\\project\\image_test_0.018\\',
-		  'C:\\Users\\Raytine\\project\\image_test_0.021\\']
+dirTests=['C:\\Users\\Raytine\\project\\image_test0.5\\',
+		  'C:\\Users\\Raytine\\project\\image_test0.6\\',
+		  'C:\\Users\\Raytine\\project\\image_test0.7\\',
+		  'C:\\Users\\Raytine\\project\\image_test0.8\\',
+		  'C:\\Users\\Raytine\\project\\image_test0.9\\',
+		  'C:\\Users\\Raytine\\project\\image_test1.0\\',
+		  'C:\\Users\\Raytine\\project\\image_test1.1\\',
+		  'C:\\Users\\Raytine\\project\\image_test1.2\\',
+		  'C:\\Users\\Raytine\\project\\image_test1.3\\',
+		  'C:\\Users\\Raytine\\project\\image_test1.4\\',
+		  'C:\\Users\\Raytine\\project\\image_test1.5\\',]
+
 
 
 
