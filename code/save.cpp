@@ -24,7 +24,7 @@ int angle=5;
 float step =0.5;
 
 //迭代次数
-int range=angle*2/step;
+int range=angle*2/step+1;
 
 double range_min=angle*(-1);
 //与实现角度大小相关的参数，
@@ -33,7 +33,7 @@ float yRotate = range_min*1.0;
 float zRotate = range_min*1.0;
 float ty = 0.0f;
 //float scale = 0.0145;
-float scale=0.02;
+float scale=0.015;
 
 
 //文件读取有关的
@@ -221,6 +221,8 @@ void myReshape(GLint w, GLint h)
 void myDisplay()
 {
     if(flag){
+        ofstream outfile;
+        outfile.open("image_train.txt",ios::out);
         for(int i=0;i<range;i++)
         {
            
@@ -229,6 +231,7 @@ void myDisplay()
                 
                 for(int k=0;k<range;k++)
                 {
+                    
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                     glLoadIdentity();
  
@@ -244,6 +247,7 @@ void myDisplay()
                     glutSwapBuffers(); //这是Opengl中用于实现双缓存技术的一个重要函数
                     char* pName=new char[30];
                     createName(xRotate,yRotate,zRotate,pName);
+                    outfile<<(pName)<<endl;
                     grab(pName);
                     zRotate=zRotate+step;
                 }
@@ -253,6 +257,7 @@ void myDisplay()
             xRotate=xRotate+step;
             yRotate=range_min*1.0;
         }
+        outfile.close();
     }
     flag=0;
 }

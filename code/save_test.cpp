@@ -22,13 +22,13 @@ float yRotate = 0;
 float zRotate = 0;
 float ty = 0.0f;
 //float scale = 0.0145;
-float scale=0.015;
 
 
 //文件读取有关的
 MyMesh mesh;
-const string file_1 = "newtest1.off";
+const string file_1 = "newtest2.off";
 
+//用于display函数
 int flag=1;
 
 GLuint showFaceList, showWireList;
@@ -37,19 +37,24 @@ bool showFace = true;
 bool showWire = false;
 bool showFlatlines = false;
 
-int WIDTH=900,HEIGHT=900;
-FIBITMAP* bitmap = FreeImage_Allocate(WIDTH, HEIGHT, 24, 8, 8, 8);
-unsigned char *mpixels = new unsigned char[WIDTH * HEIGHT * 3];
+
+
+//窗口大小
+int winSize=900;
+FIBITMAP* bitmap; 
+unsigned char *mpixels; 
+float *scales;
+float scale;
 
 int first=0;
 
-void grab(char *pName)
+void grab(char *pName,int picSize)
 {
-    
+    //int offset=(winSize-picSize)/2;
     glReadBuffer(GL_FRONT);
-    glReadPixels(0, 0, WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, mpixels);
+    glReadPixels(0, 0, picSize, picSize, GL_RGB, GL_UNSIGNED_BYTE, mpixels);
     glReadBuffer(GL_BACK);
-    for(int i = 0; i < (int)WIDTH*HEIGHT*3; i += 3)
+    for(int i = 0; i < (int)picSize*picSize*3; i += 3)
     {   
         mpixels[i] ^= mpixels[i+2] ^= mpixels[i] ^= mpixels[i+2];
     }
@@ -59,9 +64,9 @@ void grab(char *pName)
         BYTE *bits = FreeImage_GetScanLine(bitmap, y);
         for(int x = 0 ; x < FreeImage_GetWidth(bitmap); x++)
         {
-            bits[0] = mpixels[(y*WIDTH+x) * 3 + 0];
-            bits[1] = mpixels[(y*WIDTH+x) * 3 + 1];
-            bits[2] = mpixels[(y*WIDTH+x) * 3 + 2];
+            bits[0] = mpixels[(y*picSize+x) * 3 + 0];
+            bits[1] = mpixels[(y*picSize+x) * 3 + 1];
+            bits[2] = mpixels[(y*picSize+x) * 3 + 2];
             bits += 3;
         }
  
@@ -121,11 +126,7 @@ void createName(float x, float y, float z,char* n)
     {
         n[i++]=xx[j];
     }
-    if(strlen(xx)<3)
-    {
-        n[i++]='.';
-        n[i++]='0';
-    }
+
     n[i++]='_';
     char*yy=new char[20];
     sprintf(yy, "%g", y);
@@ -133,11 +134,7 @@ void createName(float x, float y, float z,char* n)
     {
         n[i++]=yy[j];
     }
-    if(strlen(yy)<3)
-    {
-        n[i++]='.';
-        n[i++]='0';
-    }
+
     n[i++]='_';
     char*zz=new char[20];
     sprintf(zz, "%g", z);
@@ -145,11 +142,7 @@ void createName(float x, float y, float z,char* n)
     {
         n[i++]=zz[j];
     }
-    if(strlen(zz)<3)
-    {
-        n[i++]='.';
-        n[i++]='0';
-    }
+
     n[i++]='.';
     n[i++]='j';
     n[i++]='p';
@@ -159,7 +152,18 @@ void createName(float x, float y, float z,char* n)
 }
 
 
+void createFileName(char*fName,char* pName)
+{
+    int t=strlen(fName);
+    fName[t++]='\\';
+    for(int i=0;i<strlen(pName);i++)
+    {
 
+        fName[t++]=pName[i];
+    }
+    fName[t++]='\0';
+
+}
 
 
 // 读取文件的函数
@@ -209,41 +213,52 @@ void myReshape(GLint w, GLint h)
 }
 double randf() 
 { 
-    double r=(double)(rand()%101);
-    r=r*1.0/10-5;
+    double r=(double)(rand()%10001);
+    r=r*1.0/1000-5;
     return r; 
 } 
 void myDisplay()
 {
-    //srand((int)time(0));//使用系统时间作为随机种子
+    srand((int)time(0));//使用系统时间作为随机种子
     if(flag){
         ofstream outfile;
         outfile.open("image_test.txt",ios::out);
-        for(int i=0;i<1000;i++)
+        for(int i=0;i<2000;i++)
         {
         
             xRotate=randf();
             yRotate=randf();
             zRotate=randf();
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glLoadIdentity();
- 
-            //与显示相关的函数
-            glRotatef(xRotate, 1.0f, 0.0f, 0.0f); // 让物体旋转的函数 第一个参数是角度大小，后面的参数是旋转的法向量
-            glRotatef(yRotate, 0.0f, 1.0f, 0.0f);
-            glRotatef(zRotate, 0.0f, 0.0f, 1.0f);
-            glTranslatef(0.0f, 0.0f, ty);
-            glScalef(scale, scale, scale); // 缩放
-                   
-            //每次display都要使用glcalllist回调函数显示想显示的顶点列表
-    
-            glCallList(showFaceList);
-            glutSwapBuffers(); //这是Opengl中用于实现双缓存技术的一个重要函数
-            char* pName=new char[30];
-
+            char* pName=new char[20];
             createName(xRotate,yRotate,zRotate,pName);
             outfile<<(pName)<<endl;
-            grab(pName);
+
+            for(int t=0;t<11;t++)
+            {
+                char* fName=new char[30];
+                sprintf(fName, "%d", t);
+                createFileName(fName,pName);
+                scale=scales[t];
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                glLoadIdentity();
+     
+                //与显示相关的函数
+                glRotatef(xRotate, 1.0f, 0.0f, 0.0f); // 让物体旋转的函数 第一个参数是角度大小，后面的参数是旋转的法向量
+                glRotatef(yRotate, 0.0f, 1.0f, 0.0f);
+                glRotatef(zRotate, 0.0f, 0.0f, 1.0f);
+                glTranslatef(0.0f, 0.0f, ty);
+                glScalef(scale, scale, scale); // 缩放
+                       
+                //每次display都要使用glcalllist回调函数显示想显示的顶点列表
+        
+                glCallList(showFaceList);
+                glutSwapBuffers(); //这是Opengl中用于实现双缓存技术的一个重要函数
+                grab(fName,winSize);
+                //free(fName);
+
+            }
+           // free(pName);
+
         }
         outfile.close();
     }
@@ -254,13 +269,43 @@ void myDisplay()
 }
 
 
+
 int main(int argc, char** argv)
 {
-    cin>>scale;
+    scales=new float[11];
+    for(int i=0;i<11;i++)
+    {
+        char *cmd=new char[30];
+        int j=0;
+        cmd[j++]='"';
+        cmd[j++]='m';
+        cmd[j++]='k';
+        cmd[j++]='d';
+        cmd[j++]='i';
+        cmd[j++]='r';
+        cmd[j++]=' ';
+        cmd[j++]='.';
+        cmd[j++]='\\';
+        char *file=new char[10];
+        sprintf(file,"%d",i);
+        for(int k=0;k<strlen(file);k++)
+        {
+            cmd[j++]=file[k];
+        }
+        cmd[j++]='"';
+        cmd[j++]='\0';
+        system(cmd);
+        //free(file);
+        //free(cmd);
+        scales[i]=0.0075+0.0015*i;
+    }
+    bitmap= FreeImage_Allocate(winSize, winSize, 24, 8, 8, 8);
+    mpixels= new unsigned char[winSize * winSize * 3];
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH); // GLUT_Double 表示使用双缓存而非单缓存
     glutInitWindowPosition(100, 100);
-    glutInitWindowSize(WIDTH, HEIGHT);
+    glutInitWindowSize(winSize, winSize);
     glutCreateWindow("Mesh Viewer");
     readfile(file_1);
     initGL();
