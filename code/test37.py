@@ -5,35 +5,38 @@ import sys
 import json
 import time
 #图像地
-dirProject='C:\\Users\\Raytine\\project\\test3\\'
+dirProject='C:\\Users\\Raytine\\project\\test\\'
 dirTrain='C:\\Users\\Raytine\\project\\image_train2\\'
 '''
-dirTests=['C:\\Users\\Raytine\\project\\image_test0.5\\',
-		  'C:\\Users\\Raytine\\project\\image_test0.6\\',
-		  'C:\\Users\\Raytine\\project\\image_test0.7\\',
-		  'C:\\Users\\Raytine\\project\\image_test0.8\\',
-		  'C:\\Users\\Raytine\\project\\image_test0.9\\',
-		  'C:\\Users\\Raytine\\project\\image_test3.0\\',
-		  'C:\\Users\\Raytine\\project\\image_test3.1\\',
-		  'C:\\Users\\Raytine\\project\\image_test3.2\\',
-		  'C:\\Users\\Raytine\\project\\image_test3.3\\',
-		  'C:\\Users\\Raytine\\project\\image_test3.4\\',
-		  'C:\\Users\\Raytine\\project\\image_test3.5\\',]'''
-dirTests=['C:\\Users\\Raytine\\project\\test3\\0\\',
-		  'C:\\Users\\Raytine\\project\\test3\\1\\',
-		  'C:\\Users\\Raytine\\project\\test3\\2\\',
-		  'C:\\Users\\Raytine\\project\\test3\\3\\',
-		  'C:\\Users\\Raytine\\project\\test3\\4\\',
-		  'C:\\Users\\Raytine\\project\\test3\\5\\',
-		  'C:\\Users\\Raytine\\project\\test3\\6\\',
-		  'C:\\Users\\Raytine\\project\\test3\\7\\',
-		  'C:\\Users\\Raytine\\project\\test3\\8\\',
-		  'C:\\Users\\Raytine\\project\\test3\\9\\',
-		  'C:\\Users\\Raytine\\project\\test3\\10\\',]
+dirTests=['C:\\Users\\Raytine\\project\\test\\0\\',
+		  'C:\\Users\\Raytine\\project\\test\\1\\',
+		  'C:\\Users\\Raytine\\project\\test\\2\\',
+		  'C:\\Users\\Raytine\\project\\test\\3\\',
+		  'C:\\Users\\Raytine\\project\\test\\4\\',
+		  'C:\\Users\\Raytine\\project\\test\\5\\',
+		  'C:\\Users\\Raytine\\project\\test\\6\\',
+		  'C:\\Users\\Raytine\\project\\test\\7\\',
+		  'C:\\Users\\Raytine\\project\\test\\8\\',
+		  'C:\\Users\\Raytine\\project\\test\\9\\',
+		  'C:\\Users\\Raytine\\project\\test\\10\\']
+'''
 
+dirTests=[
+		  'C:\\Users\\Raytine\\project\\test\\1\\',
+		 
+		  'C:\\Users\\Raytine\\project\\test\\3\\',
+		  
+		  'C:\\Users\\Raytine\\project\\test\\5\\',
+		  
+		  'C:\\Users\\Raytine\\project\\test\\7\\',
+		  
+		  'C:\\Users\\Raytine\\project\\test\\9\\',
+		  ]
 #精度要求
-precisions=[0.26,0.27,0.28,0.29,0.30]
+precisions=[0.25,0.26,0.27,0.28,0.29,0.30]
 
+#precisions=[0.20,0.25,0.30,0.35,0.40,0.45,0.50]
+#precisions=[0.10,0.11,0.12,0.13,0.14,0.15]
 #角度范围
 angle=5
 #角度间隔
@@ -43,39 +46,29 @@ step_number=int(angle/step*2+1)
 #中心矩数
 moments_num=7
 
-#读取图像moments的json文件
-with open(dirTrain+'image_train_moments.json') as load_f:
-	load_dict=json.load(load_f)
 
 
-#读取图像名字txt文件
+
+#读取图像名字txt文件,保存到一个list中
 image_train_f=open(dirTrain+'image_train.txt','r')
 img_name_train=image_train_f.readline()		
 img_name_train=img_name_train.strip('\n')	
-
-
-#将json文件中的moments读取到矩阵f中
-#矩阵F用来作中间运算
-flag=0
-f=np.empty([step_number*step_number*step_number,moments_num],dtype=float)
-F=np.empty([step_number*step_number*step_number,moments_num],dtype=float)
 img_train_list=[]
 
 while img_name_train:
 	img_train_list.append(img_name_train)
-	f[flag,:]=load_dict[img_name_train]
-	flag=flag+1
 	img_name_train=image_train_f.readline()		
 	img_name_train=img_name_train.strip('\n')	
-
 image_train_f.close()
 
+#将txt文件中的moments读取到矩阵f中
+#矩阵F用来作中间运算
+f=np.loadtxt(dirTrain+"image_train_moments.txt",delimiter=' ')
+F=np.empty([step_number*step_number*step_number,moments_num],dtype=float)
 
-#将实验统计结果保存到文件中
-result_right_f=open('right.txt','w')
-result_right_xyz_f=open('right_xyz.txt','w')
 
 
+#分别记录在三个维度预测结果达到精度要求的结果
 right=np.zeros([len(dirTests),len(precisions)],dtype=int)
 right_x=np.zeros([len(dirTests),len(precisions)],dtype=int)
 right_y=np.zeros([len(dirTests),len(precisions)],dtype=int)
@@ -92,6 +85,7 @@ img_name_test=img_name_test.strip('\n')
 
 #对每一不同偏转角度的测试图片
 while img_name_test:
+	print(img_name_test)
 	#对不同尺寸的测试图片数据集
 	for ii,dirTest in enumerate(dirTests):
 		#读取图片：图片文件夹+图片名字
@@ -167,9 +161,9 @@ while img_name_test:
 
 image_test_f.close()
 
+
+#将实验统计结果保存到文件中
 print(right)
 print(right_xyz)
-np.savetxt(dirProject+(time.strftime("%Y/%m/%d-%H:%M:%S", time.localtime()))+'right.txt',right,fmt='%d')
-np.savetxt(dirProject+(time.strftime("%Y/%m/%d-%H:%M:%S", time.localtime()))+'right_xyz.txt',right_xyz,fmt='%d')
-result_right_f.close()
-result_right_xyz_f.close()
+np.savetxt(dirProject+(time.strftime("%Y_%m_%d_%H_%M_%S", time.localtime()))+'right.txt',right,fmt='%d')
+np.savetxt(dirProject+(time.strftime("%Y_%m_%d_%H_%M_%S", time.localtime()))+'right_xyz.txt',right_xyz,fmt='%d')

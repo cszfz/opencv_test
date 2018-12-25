@@ -4,41 +4,42 @@ import numpy as np
 import sys
 import json
 import time
-
 #图像地
-dirProject='C:\\Users\\Raytine\\project\\test2\\'
-dirTrain='C:\\Users\\Raytine\\project\\image_train1\\'
+dirProject='C:\\Users\\Raytine\\project\\test3\\'
+dirTrain='C:\\Users\\Raytine\\project\\image_train3\\'
 '''
 dirTests=['C:\\Users\\Raytine\\project\\image_test0.5\\',
 		  'C:\\Users\\Raytine\\project\\image_test0.6\\',
 		  'C:\\Users\\Raytine\\project\\image_test0.7\\',
 		  'C:\\Users\\Raytine\\project\\image_test0.8\\',
 		  'C:\\Users\\Raytine\\project\\image_test0.9\\',
-		  'C:\\Users\\Raytine\\project\\image_test2.0\\',
-		  'C:\\Users\\Raytine\\project\\image_test2.1\\',
-		  'C:\\Users\\Raytine\\project\\image_test2.2\\',
-		  'C:\\Users\\Raytine\\project\\image_test2.3\\',
-		  'C:\\Users\\Raytine\\project\\image_test2.4\\',
-		  'C:\\Users\\Raytine\\project\\image_test2.5\\',]'''
-dirTests=['C:\\Users\\Raytine\\project\\test2\\0\\',
-		  'C:\\Users\\Raytine\\project\\test2\\1\\',
-		  'C:\\Users\\Raytine\\project\\test2\\2\\',
-		  'C:\\Users\\Raytine\\project\\test2\\3\\',
-		  'C:\\Users\\Raytine\\project\\test2\\4\\',
-		  'C:\\Users\\Raytine\\project\\test2\\5\\',
-		  'C:\\Users\\Raytine\\project\\test2\\6\\',
-		  'C:\\Users\\Raytine\\project\\test2\\7\\',
-		  'C:\\Users\\Raytine\\project\\test2\\8\\',
-		  'C:\\Users\\Raytine\\project\\test2\\9\\',
-		  'C:\\Users\\Raytine\\project\\test2\\10\\',]
+		  'C:\\Users\\Raytine\\project\\image_test3.0\\',
+		  'C:\\Users\\Raytine\\project\\image_test3.1\\',
+		  'C:\\Users\\Raytine\\project\\image_test3.2\\',
+		  'C:\\Users\\Raytine\\project\\image_test3.3\\',
+		  'C:\\Users\\Raytine\\project\\image_test3.4\\',
+		  'C:\\Users\\Raytine\\project\\image_test3.5\\',]'''
+dirTests=['C:\\Users\\Raytine\\project\\test3\\0\\',
+		  'C:\\Users\\Raytine\\project\\test3\\1\\',
+		  'C:\\Users\\Raytine\\project\\test3\\2\\',
+		  'C:\\Users\\Raytine\\project\\test3\\3\\',
+		  'C:\\Users\\Raytine\\project\\test3\\4\\',
+		  'C:\\Users\\Raytine\\project\\test3\\5\\',
+		  'C:\\Users\\Raytine\\project\\test3\\6\\',
+		  'C:\\Users\\Raytine\\project\\test3\\7\\',
+		  'C:\\Users\\Raytine\\project\\test3\\8\\',
+		  'C:\\Users\\Raytine\\project\\test3\\9\\',
+		  'C:\\Users\\Raytine\\project\\test3\\10\\',]
 
 #精度要求
-precisions=[0.26,0.27,0.28,0.29,0.30]
+#precisions=[0.26,0.27,0.28,0.29,0.30]
+
+precisions=[0.20,0.25,0.30,0.35,0.40,0.45,0.50]
 
 #角度范围
 angle=5
 #角度间隔
-step=0.5
+step=0.2
 #角度数目
 step_number=int(angle/step*2+1)
 #中心矩数
@@ -87,7 +88,7 @@ right_yz=np.zeros([len(dirTests),len(precisions)],dtype=int)
 right_xyz=np.zeros([len(dirTests),len(precisions)],dtype=int)
 
 #读取图像名字txt文件
-image_test_f=open(dirProject+'image_test.txt','r')
+image_test_f=open(dirProject+'image_test1.txt','r')
 img_name_test=image_test_f.readline()		
 img_name_test=img_name_test.strip('\n')	
 
@@ -170,7 +171,7 @@ image_test_f.close()
 
 print(right)
 print(right_xyz)
-np.savetxt(dirProject+(time.strftime("%Y/%m/%d-%H:%M:%S", time.localtime()))+'right.txt',right,fmt='%d')
-np.savetxt(dirProject+(time.strftime("%Y/%m/%d-%H:%M:%S", time.localtime()))+'right_xyz.txt',right_xyz,fmt='%d')
+np.savetxt(dirProject+(time.strftime("%Y_%m_%d", time.localtime()))+'right.txt',right,fmt='%d')
+np.savetxt(dirProject+(time.strftime("%Y_%m_%d", time.localtime()))+'right_xyz.txt',right_xyz,fmt='%d')
 result_right_f.close()
 result_right_xyz_f.close()

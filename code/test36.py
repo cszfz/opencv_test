@@ -5,7 +5,7 @@ import sys
 import json
 
 #图像地址
-dirTrain='C:\\Users\\Raytine\\project\\image_train1\\'
+dirTrain='C:\\Users\\Raytine\\project\\image_train3\\'
 
 #角度范围
 angle=5
@@ -26,7 +26,7 @@ img_name_train=img_name_train.strip('\n')
 img_train_list=[]
 
 d={}
-
+flag=0
 
 while img_name_train:
 	img_train_list.append(img_name_train)
@@ -38,6 +38,9 @@ while img_name_train:
 	d[img_name_train]=[M['nu20'],M['nu11'],M['nu02'],M['nu30'],M['nu21'],M['nu12'],M['nu03']]
 	img_name_train=image_train_f.readline()		
 	img_name_train=img_name_train.strip('\n')	
+	flag=flag+1
+	if flag%10000==0:
+		print(flag)
 
 image_train_f.close()
 
