@@ -21,24 +21,29 @@ typedef OpenMesh::TriMesh_ArrayKernelT<> MyMesh;
 int angle=5;
 
 //设置步长
-float step =0.5;
+float step =2;
 
 //迭代次数
-int range=angle*2/step+1;
+int range=angle*10*2/step;
+int minus_range=angle*10*(-1);
 
-double range_min=angle*(-1);
 //与实现角度大小相关的参数，
-float xRotate = range_min*1.0;
-float yRotate = range_min*1.0;
-float zRotate = range_min*1.0;
-float ty = 0.0f;
+int xNum=minus_range;
+int yNum=minus_range;
+int zNum=minus_range;
+
+float xRotate;
+float yRotate;
+float zRotate;
+
 //float scale = 0.0145;
-float scale=0.015;
+float scale=0.02;
 
 
 //文件读取有关的
 MyMesh mesh;
-const string file_1 = "newtest1.off";
+//const string file_1 = "newtest1.off";
+const string file_1 = "2rt.off";
 
 int flag=1;
 
@@ -168,7 +173,21 @@ void createName(float x, float y, float z,char* n)
 
 }
 
-
+void createFileName(char* pName,char*fName)
+{
+    int i=0;
+    fName[i++]='i';
+    fName[i++]='m';
+    fName[i++]='a';
+    fName[i++]='g';
+    fName[i++]='e';
+    fName[i++]='\\';
+    for(int j=0;j<strlen(pName);j++)
+    {
+        fName[i++]=pName[j];
+    }
+    fName[i++]='\0';
+}
 
 
 
@@ -222,15 +241,19 @@ void myDisplay()
 {
     if(flag){
         ofstream outfile;
-        outfile.open("image_train.txt",ios::out);
-        for(int i=0;i<range;i++)
+        outfile.open("image\\image_train.txt",ios::out);
+        for(int i=0;i<=range;i++)
         {
            
-            for(int j=0;j<range;j++)
+            for(int j=0;j<=range;j++)
             {
                 
-                for(int k=0;k<range;k++)
+                for(int k=0;k<=range;k++)
                 {
+                    xRotate=xNum*1.0/10;
+                    yRotate=yNum*1.0/10;
+                    zRotate=zNum*1.0/10;
+
                     
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                     glLoadIdentity();
@@ -240,22 +263,25 @@ void myDisplay()
                     glRotatef(xRotate, 1.0f, 0.0f, 0.0f); // 让物体旋转的函数 第一个参数是角度大小，后面的参数是旋转的法向量
                     glRotatef(yRotate, 0.0f, 1.0f, 0.0f);
                     glRotatef(zRotate, 0.0f, 0.0f, 1.0f);
-                    glTranslatef(0.0f, 0.0f, ty);
+                    glTranslatef(0.0f, -0.35, 0.0f);
                     glScalef(scale, scale, scale); // 缩放
                     //每次display都要使用glcalllist回调函数显示想显示的顶点列表
                     glCallList(showFaceList);
                     glutSwapBuffers(); //这是Opengl中用于实现双缓存技术的一个重要函数
-                    char* pName=new char[30];
+                    
+                    char* pName=new char[20];
                     createName(xRotate,yRotate,zRotate,pName);
                     outfile<<(pName)<<endl;
-                    grab(pName);
-                    zRotate=zRotate+step;
+                    char *fName=new char[30];
+                    createFileName(pName,fName);
+                    grab(fName);
+                    zNum=zNum+step;
                 }
-                yRotate=yRotate+step;
-                zRotate=range_min*1.0;
+                yNum=yNum+step;
+                zNum=minus_range;
             }
-            xRotate=xRotate+step;
-            yRotate=range_min*1.0;
+            xNum=xNum+step;
+            yNum=minus_range;
         }
         outfile.close();
     }
@@ -267,7 +293,7 @@ int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH); // GLUT_Double 表示使用双缓存而非单缓存
-    glutInitWindowPosition(100, 100);
+    glutInitWindowPosition(0, 0);
     glutInitWindowSize(WIDTH, HEIGHT);
     glutCreateWindow("Mesh Viewer");
     readfile(file_1);

@@ -20,13 +20,13 @@ typedef OpenMesh::TriMesh_ArrayKernelT<> MyMesh;
 float xRotate = 0;
 float yRotate = 0;
 float zRotate = 0;
-float ty = 0.0f;
-//float scale = 0.0145;
+
+
 
 
 //文件读取有关的
 MyMesh mesh;
-const string file_1 = "newtest2.off";
+const string file_1 = "2rt.off";
 
 //用于display函数
 int flag=1;
@@ -246,7 +246,7 @@ void myDisplay()
                 glRotatef(xRotate, 1.0f, 0.0f, 0.0f); // 让物体旋转的函数 第一个参数是角度大小，后面的参数是旋转的法向量
                 glRotatef(yRotate, 0.0f, 1.0f, 0.0f);
                 glRotatef(zRotate, 0.0f, 0.0f, 1.0f);
-                glTranslatef(0.0f, 0.0f, ty);
+                glTranslatef(0.0f, -0.35, 0.0f);
                 glScalef(scale, scale, scale); // 缩放
                        
                 //每次display都要使用glcalllist回调函数显示想显示的顶点列表
@@ -272,8 +272,9 @@ void myDisplay()
 
 int main(int argc, char** argv)
 {
-    scales=new float[11];
-    for(int i=0;i<11;i++)
+    scales=new float[5];
+    double init=0.012;
+    for(int i=0;i<5;i++)
     {
         char *cmd=new char[30];
         int j=0;
@@ -297,7 +298,7 @@ int main(int argc, char** argv)
         system(cmd);
         //free(file);
         //free(cmd);
-        scales[i]=0.0075+0.0015*i;
+        scales[i]=init+0.004*i;
     }
     bitmap= FreeImage_Allocate(winSize, winSize, 24, 8, 8, 8);
     mpixels= new unsigned char[winSize * winSize * 3];

@@ -1,20 +1,45 @@
 #coding=utf-8
 import cv2
 import numpy as np
+import sys
+import json
 
-img = cv2.imread('test2.jpg',0)
-ret,thresh = cv2.threshold(img,50,255,0)
-_,contours,hierarchy = cv2.findContours(thresh, 1, 2)
 
-cnt = contours[0]
-x,y,w,h = cv2.boundingRect(cnt)
+dirProject='C:\\Users\\Raytine\\project\\test1\\'
+f=np.empty([3,2],dtype=float)
+F=np.empty([3,2],dtype=float)
 
-#img = cv2.rectangle(img,(x,y),(x+w,y+h),(255, 0, 0),2)
-result=img[y:y+h,x:x+w]
-#rect = cv2.minAreaRect(cnt)
-#box = cv2.boxPoints(rect)
-#box = np.int0(box)
-#img = cv2.drawContours(img,[box],0,(0,0,255),2)
-cv2.imshow("result",result)
-cv2.imwrite("result.jpg",result)
-cv2.waitKey(0)
+
+
+f[0,:]=[1,2]
+f[1,:]=[3,4]
+f[2,:]=[5,6]
+feature=[2.5, 2.5]
+
+for i in range(3):
+	F[i,:]=f[i,:]-feature
+
+F=np.power(F,2)
+
+print(F)
+s=np.sum(F,axis=1)
+print(s)
+index=np.argmin(s)
+print(index)
+m=np.min(s)
+print(m)
+
+hhh=[[12,0,0,0,0,0,0],
+ [13,1,1,1,1,1,1],
+ [15,1,1,1,1,1,1],
+ [15,0,0,0,0,0,0],
+ [13,1,1,1,1,1,1],
+ [14,2,2,2,2,2,2],
+ [14,3,3,3,3,3,3],
+ [18,6,6,5,5,4,4],
+ [14,2,2,2,2,2,2],
+ [13,3,2,2,2,2,2],
+ [15,4,3,3,3,3,3]]
+np.savetxt(dirProject+'result.txt',hhh,fmt='%d')
+
+print(time.strftime("%Y/%m/%d-%H:%M:%S", time.localtime())) 

@@ -6,21 +6,9 @@ import json
 import time
 #图像地
 
-dirTest='C:\\Users\\Raytine\\project\\test\\5\\'
-dirTrain='C:\\Users\\Raytine\\project\\image_train2\\'
-'''
-dirTests=['C:\\Users\\Raytine\\project\\test\\0\\',
-		  'C:\\Users\\Raytine\\project\\test\\1\\',
-		  'C:\\Users\\Raytine\\project\\test\\2\\',
-		  'C:\\Users\\Raytine\\project\\test\\3\\',
-		  'C:\\Users\\Raytine\\project\\test\\4\\',
-		  'C:\\Users\\Raytine\\project\\test\\5\\',
-		  'C:\\Users\\Raytine\\project\\test\\6\\',
-		  'C:\\Users\\Raytine\\project\\test\\7\\',
-		  'C:\\Users\\Raytine\\project\\test\\8\\',
-		  'C:\\Users\\Raytine\\project\\test\\9\\',
-		  'C:\\Users\\Raytine\\project\\test\\10\\']
-'''
+dirTest='C:\\Users\\Raytine\\project\\test2\\'
+dirTrain='C:\\Users\\Raytine\\project\\image_train4\\'
+
 
 #角度范围
 angle=5
@@ -32,23 +20,10 @@ step_number=int(angle/step*2+1)
 moments_num=7
 
 
-
-
-#读取图像名字txt文件,保存到一个list中
-image_train_f=open(dirTrain+'image_train.txt','r')
-img_name_train=image_train_f.readline()		
-img_name_train=img_name_train.strip('\n')	
-img_train_list=[]
-
-while img_name_train:
-	img_train_list.append(img_name_train)
-	img_name_train=image_train_f.readline()		
-	img_name_train=img_name_train.strip('\n')	
-image_train_f.close()
-
 #将txt文件中的moments读取到矩阵f中
 #矩阵F用来作中间运算
-f=np.loadtxt(dirTrain+"image_train_moments.txt",delimiter=' ')
+f_train=np.loadtxt(dirTrain+"image_train_features.txt",delimiter=' ')
+l_train=np.loadtxt(dirTrain+"image_train_labels.txt",delimiter=' ')
 F=np.empty([step_number*step_number*step_number,moments_num],dtype=float)
 
 
@@ -58,7 +33,7 @@ while True:
 
 	#对不同尺寸的测试图片数据集
 
-	img = cv2.imread(dirTest+img_name_test,0)
+	img = cv2.imread(dirTest+'2\\'+img_name_test,0)
 	
 	#阈值操作
 	ret,thresh = cv2.threshold(img,50,255,0)
@@ -74,8 +49,7 @@ while True:
 	feature=[M['nu20'],M['nu11'],M['nu02'],M['nu30'],M['nu21'],M['nu12'],M['nu03']]
 
 	#与模型库中的所有图片中心矩比较
-	for i in range(step_number*step_number*step_number):
-		F[i,:]=f[i,:]-feature
+	F=f_train-feature
 
 	#求出曼哈顿距离最小的图片
 	F=np.abs(F)
@@ -83,9 +57,8 @@ while True:
 	index=np.argmin(s)
 	m=np.min(s)
 
-	#获得测试图片的预测偏转角度
-	img_name_train=img_train_list[index]
-	xyz_train=(img_name_train.strip('.jpg')).split('_')
+	#获得测试图片的预测偏转角度	
+	xyz_train=l_train[index]
 	x_train=float(xyz_train[0])
 	y_train=float(xyz_train[1])
 	z_train=float(xyz_train[2])

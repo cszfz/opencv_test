@@ -1,4 +1,6 @@
-#opencv test
+#coding=utf-8
+
+#对两张图片做逻辑运算
 
 import cv2
 dirPath="C:\\Users\\Raytine\\project\\image_thresh\\"
