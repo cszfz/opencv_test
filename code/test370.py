@@ -4,19 +4,23 @@ import numpy as np
 import sys
 import time
 #图像地
-dirTest='C:\\Users\\Raytine\\project\\test2\\'
-dirTrain='C:\\Users\\Raytine\\project\\image_train4\\'
+dirTest='C:\\Users\\Raytine\\project\\test3\\'
+dirTrain='C:\\Users\\Raytine\\project\\image_train\\'
 #精度要求
 precisions=[0.10,0.14,0.18,0.22,0.26,0.30]
 #precisions=[0.25,0.26,0.27,0.28,0.29,0.30]
 #precisions=[0.20,0.25,0.30,0.35,0.40,0.45,0.50]
 #precisions=[0.10,0.11,0.12,0.13,0.14,0.15]
 #角度范围
-angle=5
+angle_x=10
+angle_y=10
+angle_z=5
 #角度间隔
 step=0.2
 #角度数目
-step_number=int(angle/step*2+1)
+step_number_x=int(angle_x/step*2+1)
+step_number_y=int(angle_y/step*2+1)
+step_number_z=int(angle_z/step*2+1)
 #中心矩数
 moments_num=7
 
@@ -32,7 +36,7 @@ f_train=np.loadtxt(dirTrain+"image_train_features.txt",delimiter=' ')
 l_train=np.loadtxt(dirTrain+'image_train_labels.txt',delimiter=' ')
 l_test=np.loadtxt(dirTest+'image_test_labels.txt',delimiter=' ')
 #矩阵F用来作中间运算
-F=np.empty([step_number*step_number*step_number,moments_num],dtype=float)
+F=np.empty([step_number_x*step_number_y*step_number_z,moments_num],dtype=float)
 
 
 

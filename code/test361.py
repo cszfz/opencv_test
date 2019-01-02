@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import sys
 
-dirTest='C:\\Users\\Raytine\\project\\test1\\'
+dirTest='C:\\Users\\Raytine\\project\\test3\\'
 
 #测试集数目
 tests_num=5

@@ -2,7 +2,6 @@
 import cv2
 import numpy as np
 import sys
-import json
 import time
 #图像地
 

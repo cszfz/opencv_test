@@ -2,6 +2,7 @@
 import cv2
 import numpy as np
 import sys
+import json
 import time
 #图像地
 
@@ -28,7 +29,20 @@ F=np.empty([step_number*step_number*step_number,moments_num],dtype=float)
 
 #对不同尺寸的测试图片数据集
 
-img = cv2.imread(dirPicPath,0)
+img=cv2.imread('result.jpg')
+
+mask=np.zeros(img.shape[:2],np.uint8)
+bgdModel=np.zeros((1,65),np.float64)
+fgdModel=np.zeros((1,65),np.float64)
+rect=(5,5,541,458)
+
+cv2.grabCut(img,mask,rect,bgdModel,fgdModel,5,cv2.GC_INIT_WITH_RECT)
+
+mask2=np.where((mask==2)|(mask==0),0,1).astype('uint8')
+img=img*mask2[:,:,np.newaxis]
+
+cv2.imwrite('temp.jpg',img)
+img=cv2.imread('temp.jpg',0)
 cv2.imshow('test_img',img)
 #阈值操作
 ret,thresh = cv2.threshold(img,50,255,0)
@@ -42,7 +56,7 @@ M = cv2.moments(cnt)
 
 #归一化中心矩
 feature=[M['nu20'],M['nu11'],M['nu02'],M['nu30'],M['nu21'],M['nu12'],M['nu03']]
-
+print(str(feature))
 #与模型库中的所有图片中心矩比较
 F=f_train-feature
 
