@@ -6,18 +6,12 @@ import sys
 
 
 #图像地址
-dirTrain='C:\\Users\\Raytine\\project\\image_train\\'
+dirTrain='D:\\image\\train3\\'
 
-#角度范围
-angle_x=10
-angle_y=10
-angle_z=5
-#角度间隔
-step=0.2
-#角度数目
-step_number_x=int(angle_x/step*2+1)
-step_number_y=int(angle_y/step*2+1)
-step_number_z=int(angle_z/step*2+1)
+
+step_number_x=41
+step_number_y=121
+step_number_z=1
 #中心矩数
 moments_num=7
 
@@ -69,9 +63,25 @@ f_mean=np.mean(features, axis=0)
 
 image_train_f.close()
 image_train_list.close()
-np.savetxt(dirTrain+'image_train_features.txt',features,fmt='%f')
-np.savetxt(dirTrain+'image_train_labels.txt',labels,fmt='%f')
-np.savetxt(dirTrain+'image_train_labels_x.txt',labels_x,fmt='%f')
-np.savetxt(dirTrain+'image_train_labels_y.txt',labels_y,fmt='%f')
-np.savetxt(dirTrain+'image_train_labels_z.txt',labels_z,fmt='%f')
+
+
+featuress=np.empty([flag,moments_num],dtype=float)
+labelss=np.empty([flag,angle_num],dtype=float)
+labelss_x=np.empty([flag,1],dtype=float)
+labelss_y=np.empty([flag,1],dtype=float)
+labelss_z=np.empty([flag,1],dtype=float)
+
+
+for i in range(flag):
+	featuress[i]=features[i]
+	labelss[i]=labels[i]
+	labelss_x[i]=labels_x[i]
+	labelss_y[i]=labels_y[i]
+	labelss_z[i]=labels_z[i]
+
+np.savetxt(dirTrain+'image_train_features.txt',featuress,fmt='%f')
+np.savetxt(dirTrain+'image_train_labels.txt',labelss,fmt='%f')
+np.savetxt(dirTrain+'image_train_labels_x.txt',labelss_x,fmt='%f')
+np.savetxt(dirTrain+'image_train_labels_y.txt',labelss_y,fmt='%f')
+np.savetxt(dirTrain+'image_train_labels_z.txt',labelss_z,fmt='%f')
 np.savetxt(dirTrain+'image_train_mean.txt',f_mean,fmt='%f')

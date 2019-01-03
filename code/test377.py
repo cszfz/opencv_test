@@ -5,10 +5,9 @@ import sys
 import json
 import time
 #图像地
-
+dirTrain='D:\\image\\train3\\'
 dirTest='test\\'
 dirResult='result\\th2\\'
-dirTrain='C:\\Users\\Raytine\\project\\image_train\\'
 picNames=['045.jpg','053.jpg','107.jpg','128.jpg']
 #picNames=['015.jpg','021.jpg','025.jpg','029.jpg','045.jpg','053.jpg','059.jpg','107.jpg','128.jpg']
 
@@ -22,9 +21,9 @@ min_area=15000
 #矩阵F用来作中间运算
 f_train=np.loadtxt(dirTrain+"image_train_features.txt",delimiter=' ')
 F=np.empty(f_train.shape,dtype=float)
-f_mean=np.mean(f_train, axis=0)
-
-picName='128.jpg'
+#f_mean=np.mean(f_train, axis=0)
+f_mean=np.loadtxt(dirTrain+"image_train_mean.txt",delimiter=' ')
+picName='045.jpg'
 
 #读取图片
 img=cv2.imread(dirTest+picName,0)
@@ -109,7 +108,7 @@ print(str(f_train[index]))
 #获得测试图片的预测偏转角度	
 flag=0
 #读取图像名字txt文件
-image_train_f=open(dirTrain+'image_train.txt','r')
+image_train_f=open(dirTrain+'image_train_list.txt','r')
 img_name_train=image_train_f.readline()		
 img_name_train=img_name_train.strip('\n')	
 while flag<index:

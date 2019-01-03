@@ -5,12 +5,12 @@ import cv2
 import numpy as np
 import sys
 
-dirTest='C:\\Users\\Raytine\\project\\test3\\'
+dirTest='D:\\image\\test1\\'
 
 #测试集数目
 tests_num=5
 #单个测试集图片数
-test_num=2000
+test_num=1000
 #中心矩数
 moments_num=7
 

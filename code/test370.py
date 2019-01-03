@@ -4,30 +4,23 @@ import numpy as np
 import sys
 import time
 #图像地
-dirTest='C:\\Users\\Raytine\\project\\test3\\'
-dirTrain='C:\\Users\\Raytine\\project\\image_train\\'
+dirTest='D:\\image\\test2\\'
+dirTrain='D:\\image\\train3\\'
 #精度要求
-precisions=[0.10,0.14,0.18,0.22,0.26,0.30]
+precisions=[0.3,0.4,0.5,0.6,0.7]
 #precisions=[0.25,0.26,0.27,0.28,0.29,0.30]
 #precisions=[0.20,0.25,0.30,0.35,0.40,0.45,0.50]
 #precisions=[0.10,0.11,0.12,0.13,0.14,0.15]
-#角度范围
-angle_x=10
-angle_y=10
-angle_z=5
-#角度间隔
-step=0.2
-#角度数目
-step_number_x=int(angle_x/step*2+1)
-step_number_y=int(angle_y/step*2+1)
-step_number_z=int(angle_z/step*2+1)
+
+step_number_x=41
+step_number_y=121
+step_number_z=1
 #中心矩数
 moments_num=7
 
 #测试集数目
 tests_num=5
-#单个测试集图片数
-test_num=2000
+
 
 #将txt文件中的moments特征读取到矩阵中
 f_train=np.loadtxt(dirTrain+"image_train_features.txt",delimiter=' ')
