@@ -6,11 +6,9 @@ import sys
 
 
 #图像地址
-dirTrains=['D:\\image\\train15\\',
-		   'D:\\image\\train2\\',
-		   'D:\\image\\train25\\',
-		   'D:\\image\\train3\\',
-		   'D:\\image\\train4\\']
+dirTrains=[
+		   'D:\\image\\train2\\'
+		   ]
 
 
 step_number_x=41

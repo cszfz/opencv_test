@@ -44,53 +44,15 @@ for i in range(l):
 		feature=[M['nu20'],M['nu11'],M['nu02'],M['nu30'],M['nu21'],M['nu12'],M['nu03']]
 		f[i,:]=feature
 
-f=f-f_mean
-f=np.abs(f)
-s=np.sum(f,axis=1)
+f_temp=f-f_mean
+f_temp=np.abs(f_temp)
+s=np.sum(f_temp,axis=1)
 index=np.argmin(s)
 
-cnt = contours[index]
-x,y,w,h = cv2.boundingRect(cnt)
-x=x-3
-y=y-3
-w=w+6
-h=h+6
-result=img[y:y+h,x:x+w]
 
-cv2.imwrite('temp1.jpg',result)
-
-#对在x光片中找到的截图保存的检测目标进行图像分割
-img=cv2.imread('temp1.jpg')
-mask=np.zeros(img.shape[:2],np.uint8)
-bgdModel=np.zeros((1,65),np.float64)
-fgdModel=np.zeros((1,65),np.float64)
-rect=(3,3,w+0,h+0)
-
-cv2.grabCut(img,mask,rect,bgdModel,fgdModel,5,cv2.GC_INIT_WITH_RECT)
-
-mask2=np.where((mask==2)|(mask==0),0,1).astype('uint8')
-img=img*mask2[:,:,np.newaxis]
-
-cv2.imwrite('temp2.jpg',img)
-
-
-#对分割后的图像计算中心矩
-img=cv2.imread('temp2.jpg',0)
-cv2.imshow('test_img',img)
-#阈值操作
-ret,thresh = cv2.threshold(img,50,255,0)
-
-
-cv2.imwrite('thresh.jpg',thresh)
-#轮廓检测
-_,contours,hierarchy = cv2.findContours(thresh, 1, 2)
-cnt = contours[0]
-
-#轮廓特征矩
-M = cv2.moments(cnt)
 
 #归一化中心矩
-feature=[M['nu20'],M['nu11'],M['nu02'],M['nu30'],M['nu21'],M['nu12'],M['nu03']]
+feature=f[index]
 print(str(feature))
 
 for dirTrain in dirTrains:
