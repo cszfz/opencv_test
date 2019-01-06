@@ -11,9 +11,9 @@ dirTrains=[
 		   ]
 
 
-step_number_x=41
+step_number_x=61
 step_number_y=101
-step_number_z=13
+step_number_z=21
 #中心矩数
 moments_num=7
 

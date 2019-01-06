@@ -5,7 +5,7 @@ import sys
 import json
 import time
 #图像地址
-dirTrains=['D:\\image\\train15\\',
+dirTrains=[
 		   'D:\\image\\train2\\',
 		   'D:\\image\\train25\\',
 		   'D:\\image\\train3\\',

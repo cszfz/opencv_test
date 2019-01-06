@@ -5,12 +5,12 @@ import cv2
 import numpy as np
 
 from matplotlib import pyplot as plt
-img=cv2.imread('test4.jpg')
+img=cv2.imread('1077.JPG')
 
 mask=np.zeros(img.shape[:2],np.uint8)
 bgdModel=np.zeros((1,65),np.float64)
 fgdModel=np.zeros((1,65),np.float64)
-rect=(5,5,200,140)
+rect=(20,20,550,435)
 
 cv2.grabCut(img,mask,rect,bgdModel,fgdModel,5,cv2.GC_INIT_WITH_RECT)
 
