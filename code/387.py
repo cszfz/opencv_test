@@ -1,7 +1,7 @@
 #coding=utf-8
 #保存训练数据的moments特征以及对应angle标签
 import cv2
-import numpy as np
+import minpy.numpy as np
 import sys
 import time
 

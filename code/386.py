@@ -3,20 +3,16 @@
 import cv2
 import numpy as np
 import sys
-import time
 
-
-st = time.time()
 
 #图像地址
 dirTrains=[
-		   'D:\\image\\train2lt\\'
-		   ]
+		   'D:\\image\\train151\\']
 
 
-step_number_x=41
+step_number_x=61
 step_number_y=51
-step_number_z=21
+step_number_z=41
 #中心矩数
 moments_num=7
 
@@ -93,6 +89,3 @@ for dirTrain in dirTrains:
 	np.savetxt(dirTrain+'image_train_labels_y.txt',labelss_y,fmt='%f')
 	np.savetxt(dirTrain+'image_train_labels_z.txt',labelss_z,fmt='%f')
 	np.savetxt(dirTrain+'image_train_mean.txt',f_mean,fmt='%f')
-
-print('time: {:.3f}.'.format(time.time()-st))
-print('done')

@@ -4,16 +4,16 @@ import numpy as np
 import sys
 import json
 import time
+
+st = time.time()
 #图像地址
 dirTrains=[
-		   'D:\\image\\train2\\',
-		   'D:\\image\\train25\\',
-		   'D:\\image\\train3\\',
-		   'D:\\image\\train4\\']
+		   'D:\\image\\train2lt\\',
+		   ]
 
-dirTest='test\\'
-picNames=['045.jpg','054.jpg','107.jpg','128.jpg']
-
+dirTest='D:\\image\\lt\\'
+picNamesR=['045.jpg','054.jpg','107.jpg','128.jpg']
+picNamesL=['644.jpg','648.jpg','657.jpg','701.jpg','705.jpg','708.jpg']
 #中心矩数
 moments_num=7
 
@@ -62,6 +62,7 @@ cv2.imwrite('temp1.jpg',result)
 
 #对在x光片中找到的截图保存的检测目标进行图像分割
 img=cv2.imread('temp1.jpg')
+cv2.imshow('test_img',img)
 mask=np.zeros(img.shape[:2],np.uint8)
 bgdModel=np.zeros((1,65),np.float64)
 fgdModel=np.zeros((1,65),np.float64)
@@ -77,7 +78,7 @@ cv2.imwrite('temp2.jpg',img)
 
 #对分割后的图像计算中心矩
 img=cv2.imread('temp2.jpg',0)
-cv2.imshow('test_img',img)
+
 #阈值操作
 ret,thresh = cv2.threshold(img,50,255,0)
 

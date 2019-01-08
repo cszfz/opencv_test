@@ -1,7 +1,7 @@
 #coding=utf-8
 #保存训练数据的moments特征以及对应angle标签
 import cv2
-import numpy as np
+import minpy.numpy as np
 import sys
 import time
 
@@ -49,7 +49,10 @@ for dirTrain in dirTrains:
 		_,contours,hierarchy = cv2.findContours(thresh, 1, 2)
 		cnt = contours[0]
 		M = cv2.moments(cnt)
-		features[flag]=[M['nu20'],M['nu11'],M['nu02'],M['nu30'],M['nu21'],M['nu12'],M['nu03']]
+		f=[M['nu20'],M['nu11'],M['nu02'],M['nu30'],M['nu21'],M['nu12'],M['nu03']]
+		for ijk,val in enumerate(f):
+			features[flag:ijk]=val
+
 
 		if np.sum(np.abs(features[flag]))>0.2:
 
@@ -59,7 +62,9 @@ for dirTrain in dirTrains:
 			x_train=float(xyz_train[0])
 			y_train=float(xyz_train[1])
 			z_train=float(xyz_train[2])
-			labels[flag]=[x_train,y_train,z_train]
+			labels[flag,0]=x_train
+			labels[flag,1]=y_train
+			labels[flag,2]=z_train
 			labels_x[flag]=x_train
 			labels_y[flag]=y_train
 			labels_z[flag]=z_train
