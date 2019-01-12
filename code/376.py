@@ -7,15 +7,6 @@ import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 
-from OpenGL.GL import *
-from OpenGL.GLU import *
-from OpenGL.GLUT import *
-
-scale=0.015
-WIDTH=600
-HEIGHT=600
-
-model_file='D:\\image\\model\\2lt.off'
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -123,10 +114,6 @@ class Ui_Dialog(object):
         # 设置信号
         self.pushButton.clicked.connect(self.btn_select_pic)
         self.pushButton_2.clicked.connect(self.btn_predict)
-
-        self.result_x=0.0
-        self.result_y=0.0
-        self.result_z=0.0
 
     def btn_select_pic(self):
         fileName_choose, filetype = QFileDialog.getOpenFileName(self, "选取图片", self.cwd, "jpg Files (*.jpg)")
@@ -237,7 +224,6 @@ class Ui_Dialog(object):
         # 将txt文件中的moments读取到矩阵f中
         # 矩阵F用来作中间运算
         f_train = np.loadtxt(dirTrain + "image_train_features.txt", delimiter=' ')
-        l_train = np.loadtxt(dirTrain + "image_train_labels.txt", delimiter=' ')
         F = np.empty(f_train.shape, dtype=float)
 
         # 与模型库中的所有图片中心矩比较l
@@ -247,22 +233,24 @@ class Ui_Dialog(object):
         s = np.sum(F, axis=1)
         index = np.argmin(s)
 
-        self.textEdit.setText(str(l_train[index]))
-        self.result_x=l_train[index][0]
-        self.result_y=l_train[index][1]
-        self.result_z=l_train[index][2]
-        show_result()
+        # 获得测试图片的预测偏转角度
+        flag = 0
+        # 读取图像名字txt文件
+        image_train_f = open(dirTrain + 'image_train_list.txt', 'r')
+        img_name_train = image_train_f.readline()
+        img_name_train = img_name_train.strip('\n')
+        while flag < index:
+            flag = flag + 1
+            img_name_train = image_train_f.readline()
+            img_name_train = img_name_train.strip('\n')
+        image_train_f.close()
 
-def show_result():
-    glutInit()
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH)
-    glutInitWindowSize(WIDTH, HEIGHT)
-    glutCreateWindow("result")
-    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION)
-    glutDisplayFunc(display)
-    glutMainLoop()
-    return 
+        # print(str(f_train[index]))
+        # result_img = cv2.imread(dirTrain + img_name_train)
+        # cv2.imwrite('result.jpg', result_img)
+        # print('测试结果:' + img_name_train)
 
+        self.textEdit.setText(img_name_train)
 
 
 class MainForm(QWidget, Ui_Dialog):
@@ -271,57 +259,6 @@ class MainForm(QWidget, Ui_Dialog):
         self.setupUi((self))
         self.enable()
 
-def display():
-    glClearColor(0.0,0.0,0.0,0.0)
-    glClearDepth(2.0)
-    glShadeModel(GL_SMOOTH)
-
-    showFacelist = glGenLists(1)
-    mf=open(model_file,'r')
-    line=mf.readline()
-    line=mf.readline()
-    num=line.split(' ')
-    vertex_num=int(num[0])
-    face_num=int(num[1])
-
-    points=np.empty([vertex_num,3],dtype=float)
-
-    for i in range(vertex_num):
-        line=mf.readline()
-        vertex=line.split(' ')
-        points[i][0]=float(vertex[0])
-        points[i][1]=float(vertex[1])
-        points[i][2]=float(vertex[2])
-
-
-    glNewList(showFacelist, GL_COMPILE)
-
-    for i in range(face_num):
-        line=mf.readline()
-        vertexs=line.split(' ')
-
-        glBegin(GL_TRIANGLES)
-        glVertex3fv(points[int(vertexs[1])])
-        glVertex3fv(points[int(vertexs[2])])
-        glVertex3fv(points[int(vertexs[3])])
-        glEnd()
-
-    glEndList()
-
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-    glLoadIdentity()
-
-    glRotatef(mainForm.result_x,1.0,0.0,0.0)
-    glRotatef(mainForm.result_y,0.0,1.0,0.0)
-    glRotatef(mainForm.result_z,0.0,0.0,1.0)
-
-    glTranslatef(0.0,-0.35,0.0)
-
-    glScalef(scale,scale,scale)
-
-    glCallList(showFacelist)
-
-    glutSwapBuffers()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

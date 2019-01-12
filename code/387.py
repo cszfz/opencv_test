@@ -1,7 +1,7 @@
 #coding=utf-8
 #保存训练数据的moments特征以及对应angle标签
 import cv2
-import minpy.numpy as np
+import numpy as np
 import sys
 import time
 
@@ -10,13 +10,13 @@ st = time.time()
 
 #图像地址
 dirTrains=[
-		   'D:\\image\\train2lt\\'
+		   'D:\\image\\train15lt\\'
 		   ]
 
 
-step_number_x=41
-step_number_y=51
-step_number_z=21
+step_number_x=61
+step_number_y=121
+step_number_z=41
 #中心矩数
 moments_num=7
 
