@@ -15,7 +15,15 @@ scale=0.015
 WIDTH=600
 HEIGHT=600
 
-model_file='D:\\image\\model\\2lt.off'
+trains = [['15l', '2l', '25l', '3l', '4l'],
+          ['15r', '2r', '25r', '3r', '4r']]
+results = [[[['外旋',' 外翻'],['外旋',' 内翻']],
+            [['内旋',' 外翻'],['内旋',' 内翻']]],
+           [[['内旋',' 内翻'],['内旋',' 外翻']],
+            [['外旋',' 内翻'],['外旋',' 外翻']]]]
+
+
+
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -127,6 +135,10 @@ class Ui_Dialog(object):
         self.result_x=0.0
         self.result_y=0.0
         self.result_z=0.0
+        self.y_sign=0
+        self.z_sign=0
+
+
 
     def btn_select_pic(self):
         fileName_choose, filetype = QFileDialog.getOpenFileName(self, "选取图片", self.cwd, "jpg Files (*.jpg)")
@@ -146,9 +158,6 @@ class Ui_Dialog(object):
 
         fileName_choose = self.lineEdit.text()
 
-        trains = [['15l', '2l', '25l', '3l', '4l'],
-                  ['15r', '2r', '25r', '3r', '4r']]
-
         if self.radioButton.isChecked():
             self.location = 0
         if self.radioButton_2.isChecked():
@@ -165,7 +174,7 @@ class Ui_Dialog(object):
         if self.radioButton_7.isChecked():
             self.size = 4
 
-        dirTrain = 'D:\\image\\txt\\' + trains[self.location][self.size] + '\\'
+        dirTrain = 'DependentFiles\\txt\\' + trains[self.location][self.size] + '\\'
 
         # 中心矩数
         moments_num = 7
@@ -247,10 +256,29 @@ class Ui_Dialog(object):
         s = np.sum(F, axis=1)
         index = np.argmin(s)
 
-        self.textEdit.setText(str(l_train[index]))
+
         self.result_x=l_train[index][0]
         self.result_y=l_train[index][1]
         self.result_z=l_train[index][2]
+
+
+
+        if self.result_y<0:
+            self.y_sign=1
+        if self.result_z<0:
+            self.z_sign=1
+
+        result=results[self.location][self.y_sign][self.z_sign]
+        result_str=result[0]+str(abs(self.result_y))+','+result[1]+str(abs(self.result_z))
+
+
+
+
+
+
+        self.textEdit.setText(result_str)
+
+
         show_result()
 
 def show_result():
@@ -261,7 +289,7 @@ def show_result():
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION)
     glutDisplayFunc(display)
     glutMainLoop()
-    return 
+    return
 
 
 
@@ -271,14 +299,16 @@ class MainForm(QWidget, Ui_Dialog):
         self.setupUi((self))
         self.enable()
 
+
 def display():
+    model_file = 'DependentFiles\\model\\'+trains[mainForm.size][mainForm.location] + '.off'
     glClearColor(0.0,0.0,0.0,0.0)
     glClearDepth(2.0)
     glShadeModel(GL_SMOOTH)
 
     showFacelist = glGenLists(1)
     mf=open(model_file,'r')
-    line=mf.readline()
+    mf.readline()
     line=mf.readline()
     num=line.split(' ')
     vertex_num=int(num[0])
@@ -324,7 +354,8 @@ def display():
     glutSwapBuffers()
 
 if __name__ == "__main__":
+
     app = QApplication(sys.argv)
-    mainForm = MainForm()
+    mainForm = MainForm() 
     mainForm.show()
     sys.exit(app.exec_())

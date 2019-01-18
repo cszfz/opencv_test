@@ -7,8 +7,8 @@ import time
 
 #图像地址
 dirTrains=[
-		   'D:\\image\\train2lt\\',
-		   ]
+           'D:\\image\\train2lt\\',
+           ]
 
 dirTest='D:\\image\\lt\\'
 picNamesR=['045.jpg','054.jpg','107.jpg','128.jpg']
@@ -37,12 +37,12 @@ l=len(contours)
 f=np.empty([l,moments_num],dtype=float)
 
 for i in range(l):
-	cnt = contours[i]
-	area = cv2.contourArea(cnt)
-	if area>min_area:
-		M = cv2.moments(cnt)
-		feature=[M['nu20'],M['nu11'],M['nu02'],M['nu30'],M['nu21'],M['nu12'],M['nu03']]
-		f[i,:]=feature
+    cnt = contours[i]
+    area = cv2.contourArea(cnt)
+    if area>min_area:
+        M = cv2.moments(cnt)
+        feature=[M['nu20'],M['nu11'],M['nu02'],M['nu30'],M['nu21'],M['nu12'],M['nu03']]
+        f[i,:]=feature
 
 f=f-f_mean
 f=np.abs(f)
@@ -95,39 +95,39 @@ feature=[M['nu20'],M['nu11'],M['nu02'],M['nu30'],M['nu21'],M['nu12'],M['nu03']]
 print(str(feature))
 
 for dirTrain in dirTrains:
-	#将txt文件中的moments读取到矩阵f中
-	#矩阵F用来作中间运算
-	f_train=np.loadtxt(dirTrain+"image_train_features.txt",delimiter=' ')
-	F=np.empty(f_train.shape,dtype=float)
+    #将txt文件中的moments读取到矩阵f中
+    #矩阵F用来作中间运算
+    f_train=np.loadtxt(dirTrain+"image_train_features.txt",delimiter=' ')
+    F=np.empty(f_train.shape,dtype=float)
 
 
-	#与模型库中的所有图片中心矩比较l
-	F=f_train-feature
+    #与模型库中的所有图片中心矩比较l
+    F=f_train-feature
 
-	#求出曼哈顿距离最小的图片
-	F=np.abs(F)
-	s=np.sum(F,axis=1)
-	index=np.argmin(s)
-	m=np.min(s)
+    #求出曼哈顿距离最小的图片
+    F=np.abs(F)
+    s=np.sum(F,axis=1)
+    index=np.argmin(s)
+    m=np.min(s)
 
-	print(str(f_train[index]))
-	print(m)
+    print(str(f_train[index]))
+    print(m)
 
-	#获得测试图片的预测偏转角度	
-	flag=0
-	#读取图像名字txt文件
-	image_train_f=open(dirTrain+'image_train_list.txt','r')
-	img_name_train=image_train_f.readline()		
-	img_name_train=img_name_train.strip('\n')	
-	while flag<index:
-		flag=flag+1
-		img_name_train=image_train_f.readline()		
-		img_name_train=img_name_train.strip('\n')
-	image_train_f.close()
+    #获得测试图片的预测偏转角度  
+    flag=0
+    #读取图像名字txt文件
+    image_train_f=open(dirTrain+'image_train_list.txt','r')
+    img_name_train=image_train_f.readline()     
+    img_name_train=img_name_train.strip('\n')   
+    while flag<index:
+        flag=flag+1
+        img_name_train=image_train_f.readline()     
+        img_name_train=img_name_train.strip('\n')
+    image_train_f.close()
 
-	result_img=cv2.imread(dirTrain+img_name_train)
-	print(img_name_train)
+    result_img=cv2.imread(dirTrain+img_name_train)
+    print(img_name_train)
 
 
-	cv2.imshow('result',result_img)
-	cv2.waitKey(0)
+    cv2.imshow('result',result_img)
+    cv2.waitKey(0)
