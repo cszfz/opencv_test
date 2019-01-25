@@ -14,40 +14,40 @@
 
 using namespace std;
 typedef OpenMesh::TriMesh_ArrayKernelT<> MyMesh;
-//Ä£ÐÍµØÖ·
-const string file_1 = "D:\\image\\model\\2lt.off";
+//模型地址
+const string file_1 = "D:\\image\\model\\15rt.off";
 
-//Í¼Æ¬´æ·ÅµØÖ·
-const char *dirTrain="D:\\image\\train\\";
+//图片存放地址
+const char *dirTrain="D:\\image\\train15rt\\";
 
-const char *image_txt="D:\\image\\train\\image_train.txt";
+const char *image_txt="D:\\image\\train15rt\\image_train.txt";
 
-//ÉèÖÃ½Ç¶È·¶Î§
-int angle_x=0;
-int angle_y=0;
+//设置角度范围
+int angle_x=30;
+int angle_y=60;
 int angle_z=20;
 
-//ÆðÊ¼½Ç¶È
-int s_x=-0;
-int s_y=-0;
+//起始角度
+int s_x=-10;
+int s_y=-30;
 int s_z=-10;
 
-//ÉèÖÃ²½³¤
-float step =10;
+//设置步长
+float step =5;
 
-//µü´ú´ÎÊý
+//迭代次数
 int range_x=angle_x*10/step;
 int range_y=angle_y*10/step;
 int range_z=angle_z*10/step;
 
 
-//ÆðÊ¼µü´ú
+//起始迭代
 int minus_range_x=s_x*10;
 int minus_range_y=s_y*10;
 int minus_range_z=s_z*10;
 
 
-//ÓëÊµÏÖ½Ç¶È´óÐ¡Ïà¹ØµÄ²ÎÊý£¬
+//与实现角度大小相关的参数，
 int xNum=minus_range_x;
 int yNum=minus_range_y;
 int zNum=minus_range_z;
@@ -60,7 +60,7 @@ float zRotate;
 float scale=0.02;
 
 
-//ÎÄ¼þ¶ÁÈ¡ÓÐ¹ØµÄ
+//文件读取有关的
 MyMesh mesh;
 
 
@@ -77,7 +77,6 @@ FIBITMAP* bitmap = FreeImage_Allocate(WIDTH, HEIGHT, 24, 8, 8, 8);
 unsigned char *mpixels = new unsigned char[WIDTH * HEIGHT * 3];
 
 int first=0;
-
 void grab(char *pName)
 {
     glReadBuffer(GL_FRONT);
