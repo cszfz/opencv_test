@@ -6,16 +6,21 @@ import sys
 
 
 #图像地址
+
+dirTrains=['D:\\image\\train15rt\\',
+		   ]
+
+'''
 dirTrains=['D:\\image\\train15\\',
 		   'D:\\image\\train2\\',
 		   'D:\\image\\train25\\',
 		   'D:\\image\\train3\\',
 		   'D:\\image\\train4\\']
-
+'''
 
 step_number_x=41
-step_number_y=101
-step_number_z=13
+step_number_y=41
+step_number_z=41
 #中心矩数
 moments_num=7
 
